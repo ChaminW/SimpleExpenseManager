@@ -34,7 +34,7 @@ public class PersistentAccountDAO extends DBHelper implements AccountDAO {
         List<String> array_list = new ArrayList<>();
         SQLiteDatabase db =this.getReadableDatabase();
 
-        String query = "select account_no from account";
+        String query = "SELECT account_no FROM accounts";
         Cursor res =  db.rawQuery( query, null );
         res.moveToFirst();
 
@@ -49,15 +49,15 @@ public class PersistentAccountDAO extends DBHelper implements AccountDAO {
     @Override
     public List<Account> getAccountsList() {
         // give list of all accounts
-        List<Account> array_list = new ArrayList<>();
+        List<Account> array_list = new ArrayList<Account>();
         SQLiteDatabase db =this.getReadableDatabase();
 
-        String query = "select * from account";
+        String query = "SELECT * from accounts";
         Cursor res =  db.rawQuery( query, null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(new Account(res.getString(res.getColumnIndex(ACC_ACCOUNT_NO)),res.getString(res.getColumnIndex(ACC_BANK)),res.getString(res.getColumnIndex(ACC_ACCOUNT_HOLDER)),res.getDouble(res.getColumnIndex(ACC_BALANCE))));
+            array_list.add(new Account(res.getString(res.getColumnIndex(ACC_ACCOUNT_NO)), res.getString(res.getColumnIndex(ACC_BANK)), res.getString(res.getColumnIndex(ACC_ACCOUNT_HOLDER)), res.getDouble(res.getColumnIndex(ACC_BALANCE))));
             res.moveToNext();
         }
         db.close();
@@ -71,10 +71,10 @@ public class PersistentAccountDAO extends DBHelper implements AccountDAO {
         //give account details as requested account number
         SQLiteDatabase db =this.getReadableDatabase();
 
-        String query = "select * from account where account_no=?";
+        String query = "select * from accounts where account_no=?";
         Cursor res =  db.rawQuery( query, new String[]{accountNo} );
         res.moveToFirst();
-        while(res.getCount()==1){
+        if(res.getCount()==1){
             return new Account(res.getString(res.getColumnIndex(ACC_ACCOUNT_NO)),res.getString(res.getColumnIndex(ACC_BANK)),res.getString(res.getColumnIndex(ACC_ACCOUNT_HOLDER)),res.getDouble(res.getColumnIndex(ACC_BALANCE)));
         }
         db.close();
@@ -90,7 +90,7 @@ public class PersistentAccountDAO extends DBHelper implements AccountDAO {
     public void addAccount(Account account) {
         // add new account
         SQLiteDatabase db= this.getWritableDatabase();
-        String query = "insert into account VALUES (?,?,?,?)";
+        String query = "INSERT INTO accounts VALUES (?,?,?,?)";
         db.execSQL(query, new String[]{account.getAccountNo(), account.getBankName(), account.getAccountHolderName(), String.valueOf(account.getBalance())});
         db.close();
 
@@ -118,7 +118,7 @@ public class PersistentAccountDAO extends DBHelper implements AccountDAO {
         SQLiteDatabase db= this.getWritableDatabase();
 
         try{
-            String query = "select * from account where account_no=?";
+            String query = "SELECT * FROM accounts WHERE account_no=?";
             Cursor res =  db.rawQuery( query, new String[]{accountNo} );
             if(res.getCount()==0){
                 String msg = "Account " + accountNo + " is invalid.";

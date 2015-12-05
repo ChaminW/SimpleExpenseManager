@@ -13,13 +13,13 @@ import java.util.HashMap;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "130648V.db";
-    public static final String TABLE_ACC = "account";
+    public static final String TABLE_ACC = "accounts";
     public static final String ACC_ACCOUNT_NO = "account_no";
     public static final String ACC_BANK = "bank";
     public static final String ACC_ACCOUNT_HOLDER = "acc_holder";
     public static final String ACC_BALANCE = "acc_bal";
 
-    public static final String TABLE_TRAN = "transaction";
+    public static final String TABLE_TRAN = "transactions";
     public static final String TRAN_ACCOUNT_NO = "account_no";
     public static final String TRAN_TYPE = "type";
     public static final String TRAN_AMOUNT = "amount";
@@ -36,11 +36,13 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-                "create table account " +
-                        "(account_no text primary key NOT NULL, bank text NOT NULL,acc_holder text NOT NULL,acc_bal real NOT NULL)");
+                "CREATE TABLE accounts " +
+                        "(account_no TEXT PRIMARY KEY NOT NULL, bank TEXT NOT NULL,acc_holder TEXT NOT NULL,acc_bal REAL NOT NULL)"
+        );
         db.execSQL(
-                "create table transaction " +
-                        "(account_no text NOT NULL, type text NOT NULL,amount real NOT NULL,date real NOT NULL, FOREIGN KEY (accountN_no) REFERENCES account(account_no))");
+                "CREATE TABLE transactions " +
+                        "(account_no TEXT NOT NULL, type TEXT NOT NULL,amount REAL NOT NULL,date REAL NOT NULL, FOREIGN KEY (account_no) REFERENCES accounts(account_no))"
+        );
 
         System.out.println("database created***************************");
 
@@ -51,11 +53,13 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        db.execSQL("DROP TABLE IF EXISTS transaction");
+        onCreate(db);
+
         db.execSQL("DROP TABLE IF EXISTS account");
         onCreate(db);
 
-        db.execSQL("DROP TABLE IF EXISTS transaction");
-        onCreate(db);
+
     }
 }
 

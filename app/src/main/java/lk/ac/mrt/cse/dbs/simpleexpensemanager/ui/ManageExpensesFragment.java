@@ -122,4 +122,26 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
                 break;
         }
     }
+    // To update the UI as the accounts get updated
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            update();
+        }
+        else{
+
+        }
+    }
+
+
+    public void update() {
+        ArrayAdapter<String> adapter = null;
+        if (currentExpenseManager != null) {
+            adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
+                    currentExpenseManager.getAccountNumbersList());
+        }
+        if (accountSelector != null)
+            accountSelector.setAdapter(adapter);
+    }
 }

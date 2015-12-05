@@ -34,7 +34,7 @@ public class PersistentTransactionDAO extends DBHelper implements TransactionDAO
         String strDate = dateFormater.format(date);
 
         try{
-            String query = "insert into transaction VALUES (?,?,?,?)";
+            String query = "insert into transactions VALUES (?,?,?,?)";
             db.execSQL(query, new String[]{accountNo,expenseType == ExpenseType.EXPENSE ? "EXPENSE": "INCOME", String.valueOf(amount),strDate});
 
         }
@@ -54,7 +54,7 @@ public class PersistentTransactionDAO extends DBHelper implements TransactionDAO
         List<Transaction> array_list = new ArrayList<>();
         SQLiteDatabase db =this.getReadableDatabase();
         try {
-            String query = "select * from transaction order by date(`date`) DESC";
+            String query = "select * from transactions order by date(`date`) DESC";
             Cursor res = db.rawQuery(query, null);
             res.moveToFirst();
 
@@ -94,7 +94,7 @@ public class PersistentTransactionDAO extends DBHelper implements TransactionDAO
         SQLiteDatabase db =this.getReadableDatabase();
 
         try {
-            String query = "select * from transaction order by date(`date`) DESC LIMIT " + limit;
+            String query = "select * from transactions order by date(`date`) DESC LIMIT " + limit;
             Cursor res = db.rawQuery(query, null);
             res.moveToFirst();
 
